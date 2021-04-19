@@ -272,6 +272,9 @@ components:
             - $ref: '#/components/schemas/AWSUploadStatus'
             - $ref: '#/components/schemas/GCPUploadStatus'
             - $ref: '#/components/schemas/AzureUploadStatus'
+    UploadTypes:
+      type: string
+      enum: ['aws', 'gcp', 'azure']
     AWSUploadStatus:
       type: object
       required:
@@ -378,21 +381,43 @@ components:
         id:
           type: string
     UploadRequest:
+      oneOf:
+        - $ref: '#/components/schemas/AWSUploadRequest'
+        - $ref: '#/components/schemas/GCPUploadRequest'
+        - $ref: '#/components/schemas/AzureUploadRequest'
+    AWSUploadRequest:
       type: object
       required:
         - type
         - options
       properties:
         type:
-          $ref: '#/components/schemas/UploadTypes'
+          type: string
+          enum: ['aws']
         options:
-          oneOf:
-            - $ref: '#/components/schemas/AWSUploadRequestOptions'
-            - $ref: '#/components/schemas/GCPUploadRequestOptions'
-            - $ref: '#/components/schemas/AzureUploadRequestOptions'
-    UploadTypes:
-      type: string
-      enum: ['aws', 'gcp', 'azure']
+          $ref: '#/components/schemas/AWSUploadRequestOptions'
+    GCPUploadRequest:
+      type: object
+      required:
+        - type
+        - options
+      properties:
+        type:
+          type: string
+          enum: ['gcp']
+        options:
+          $ref: '#/components/schemas/GCPUploadRequestOptions'
+    AzureUploadRequest:
+      type: object
+      required:
+        - type
+        - options
+      properties:
+        type:
+          type: string
+          enum: ['azure']
+        options:
+          $ref: '#/components/schemas/AzureUploadRequestOptions'
     AWSUploadRequestOptions:
       type: object
       required:
